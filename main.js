@@ -1,7 +1,11 @@
-let aNumber = "";
-let bNumber = "";
+let aNumber = null;
+let bNumber = null;
 let operator = "";
 let displayVal = "";
+let displayVal2 = "";
+let lastClickedButton = null;
+
+
 
 function add(a,b){
     return a + b ;
@@ -17,8 +21,13 @@ function multiply(a,b){
 };
 
 function divide(a,b){
+    if( b === 0){
+        return "You can't divide by 0!"
+     }
     return a / b;
-}
+};
+
+
 
 function operate(num1,operator,num2){
     if(operator === "+"){
@@ -30,53 +39,144 @@ function operate(num1,operator,num2){
     }else if (operator === "/"){
         return divide(num1,num2);
     }
-}
+        
+    
+};
+
+
+
+
 
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".operators")
 const equalsButton = document.querySelector("#equals");
+const clearButton = document.querySelector("#clear")
+const decimalButton = document.querySelector("#decimal")
+const buttons = document.querySelectorAll(".button")
 
-equalsButton.addEventListener("click",function(event){
-    let result = operate(+aNumber,operator,+bNumber);
-    displayVal = result;
-    display();
-    aNumber = result;
-    operator = "";
+buttons.forEach((button) => {
+    button.addEventListener('click',function(event){
+        lastClickedButton = event.target.innerText;
+    });
+});
+
+function getLastClickedButton(){
+    return lastClickedButton;
+}
+
+
+decimalButton.addEventListener("click", function (event) {
+    let activeNum = operator === "" ? aNumber : bNumber ;
+    if (!activeNum.includes(".")){
+        displayVal += event.target.innerText;
+    if(operator === ""){
+        aNumber += event.target.innerText
+    }else{
+        bNumber += event.target.innerText
+    }
+     display();
+    }
+  });
+
+
+
+
+  equalsButton.addEventListener("click", function (event) {
+    if (operator !== "") {
+      let result = operate(+aNumber, operator, +bNumber);
+      displayVal = result;
+      display();
+      aNumber = result;
+      operator = "";
+      bNumber = "";
+    } else {
+      displayVal = aNumber;
+      display();
+    }
+  });
+  
+
+
+clearButton.addEventListener("click",function(event){
+    aNumber = "";
     bNumber = "";
-    })
-   
+    operator = "";
+    displayVal = "";
+    display();
+});
 
-
+console.log(aNumber,bNumber,operator,displayVal)
 
 operatorButtons.forEach((button) => button.addEventListener("click",function(event){
+    const displayValStr = String(displayVal);
+    if(displayValStr.includes("+") || 
+       displayValStr.includes("-") || 
+       displayValStr.includes("*") || 
+       displayValStr.includes("/") 
+     ){
+        let result = operate(+aNumber,operator,+bNumber);
+        displayVal = result;
+        operator = event.target.innerText;
+        displayVal += operator;
+        display();
+        aNumber = result ;
+        operator = event.target.innerText;
+        bNumber = "";
+        
+
+
+
+ }else{
     operator = event.target.innerText;
     displayVal += operator;
     display();
+}
+    
+
 }));
- 
-   
- 
+
+console.log(aNumber,bNumber,operator,displayVal)
+
+ //figure out why undefined bug occurs when user hits equals with no operator
 console.log(numberButtons)
-numberButtons.forEach((button) => button.addEventListener("click",function(event){
-     if(operator === ""){
-        aNumber = event.target.innerText;
-        displayVal = aNumber;
-    }else{
-        bNumber = event.target.innerText;
-        displayVal = bNumber;
+
+numberButtons.forEach((button) =>
+  button.addEventListener("click", function (event) {
+    if (operator === "") {
+      aNumber = aNumber ? aNumber + event.target.innerText : event.target.innerText;
+      displayVal += event.target.innerText;
+    } else {
+      bNumber = bNumber ? bNumber + event.target.innerText : event.target.innerText;
+      displayVal += event.target.innerText;
+      
     }
+
+    console.log(aNumber, bNumber, operator, displayVal);
+
+    display();
+  })
+);
+
 
     console.log(aNumber,bNumber,operator,displayVal)
    
 
-    display();
+  
+  display2();
 
-    }));
 
-function display(){
-    document.getElementById("display").innerText = displayVal;
+  function display2(){
+    document.getElementById("display2").innertext = displayVal2;
+  }
+
+    function display(){
+    let startDisplay = 0;
+    document.getElementById("display").innerText = displayVal || startDisplay;
 
 };
+
+display();
+
 
 console.log(add);
 console.log(subtract);
