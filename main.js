@@ -6,7 +6,13 @@ let displayVal2 = "";
 let lastClickedButton = null;
 
 
+//figure out negatives bug
 
+
+
+
+
+// add in second display above main
 function add(a,b){
     return a + b ;
 };
@@ -46,23 +52,46 @@ function operate(num1,operator,num2){
 
 
 
-
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".operators")
 const equalsButton = document.querySelector("#equals");
 const clearButton = document.querySelector("#clear")
 const decimalButton = document.querySelector("#decimal")
-const buttons = document.querySelectorAll(".button")
+const buttons = document.querySelectorAll("button")
+const deleteButton = document.querySelector("#delete");
+
+//add Delete/backspace button
+
+deleteButton.addEventListener("click", function(event) {
+  let activeNum = operator === "" ? aNumber : bNumber ;
+  if (activeNum === aNumber){
+    aNumber = "";
+  }else if(activeNum === bNumber){
+    bNumber = "";
+  }else if(activeNum === operator){
+    operator = "";
+  }
+  
+  displayVal = displayVal.toString();
+  displayVal = displayVal.slice(0, -1);
+  display();
+});
+
+
+
+
 
 buttons.forEach((button) => {
     button.addEventListener('click',function(event){
         lastClickedButton = event.target.innerText;
+        console.log(lastClickedButton)
     });
 });
 
 function getLastClickedButton(){
     return lastClickedButton;
 }
+
 
 
 decimalButton.addEventListener("click", function (event) {
@@ -137,7 +166,7 @@ operatorButtons.forEach((button) => button.addEventListener("click",function(eve
 
 console.log(aNumber,bNumber,operator,displayVal)
 
- //figure out why undefined bug occurs when user hits equals with no operator
+ 
 console.log(numberButtons)
 
 numberButtons.forEach((button) =>
