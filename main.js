@@ -9,10 +9,12 @@ let lastClickedButton = null;
 //figure out negatives bug
 
 
+//prevent overflow
 
 
+// add in second display above main Extra credit
 
-// add in second display above main
+
 function add(a,b){
     return a + b ;
 };
@@ -203,6 +205,54 @@ numberButtons.forEach((button) =>
     document.getElementById("display").innerText = displayVal || startDisplay;
 
 };
+
+document.addEventListener('keydown', function(event) {
+  const key = event.key;  // get the key pressed
+
+  if (!isNaN(key) || key === '.') {
+      // if it's a number or decimal point
+      document.querySelector(`button[data-key="${key}"]`).click();
+  } else {
+      // for the operators, equals, clear, and backspace operations
+      let operatorKey;
+      switch (key) {
+          case '+':
+              operatorKey = 'add';
+              break;
+          case '-':
+              operatorKey = 'subtract';
+              break;
+          case '*':
+              operatorKey = 'multiply';
+              break;
+          case '/':
+              operatorKey = 'divide';
+              break;
+          case '=':
+          case 'Enter':  // using enter as equals
+              operatorKey = 'equals';
+              break;
+          case 'Backspace':
+          case 'Delete':
+              operatorKey = 'delete'
+              break;
+         case 'Escape':  // using delete key as clear
+              operatorKey = 'clear';
+              break;
+          default:
+              return;  // if key does not match any case, just return
+      }
+      document.querySelector(`#${operatorKey}`).click();
+  }
+});
+
+
+ 
+
+
+
+
+
 
 display();
 
